@@ -2,18 +2,20 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-    <title>Django Tailwind</title>
+    <title>Cookbook</title>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta http-equiv="X-UA-Compatible" content="ie=edge">
 		{% tailwind_css %}
 	</head>
 
-	<body class="bg-gray-50 font-serif leading-normal tracking-normal">
-		<div class="container mx-auto">
-			<section class="flex items-center justify-center h-screen">
-				<h1 class="text-5xl">Django + Tailwind = ❤️</h1>
-			</section>
-		</div>
+	<body class="overflow-hidden bg-gray-[#dde5b6]">
+		<header>
+			<button class="mx-4 mt-4 py-3 px-7 bg-[#6C584C] text-[#A98467] font-bold text-3xl rounded-full"><a href="/">Cookbook</a></button>
+		</header>
+	
+		<main class="">
+			{% block content %}{% endblock %}
+		</main>
 	</body>
 </html>
