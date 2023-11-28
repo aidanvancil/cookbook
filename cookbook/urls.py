@@ -23,8 +23,8 @@ urlpatterns = [
     path("__reload__/", include("django_browser_reload.urls")),
     path('home/', views.home, name='home'),
     path('login/', views.login, name='login'),
-    path('', views.master, name='master'),
-    path('signup/', views.signup, name='signup'),
+    path('', views.signup, name='signup'),
     path('logout/', views.logout, name='logout'),
+    path('bookmarks/', views.bookmarks, name='bookmarks'),
     re_path(r'^.*/$', views.errors, name='errors'),
 ]
