@@ -1,0 +1,14 @@
+<!-- home.html -->
+{% extends 'base_home.html' %}
+
+{% block main_content %}
+  <h2 class="text-2xl font-semibold mb-6">Welcome, {{ user.username }}!</h2>
+  <p class="mb-4">Home page.</p>
+
+  <!-- Search Bar -->
+  <div class="mb-6">
+    <input type="text" placeholder="Search for recipes..." class="w-full p-2 border border-gray-300 rounded">
+  </div>
+
+  <a href="{% url 'logout' %}" class="text-blue-500 hover:underline">Logout</a>
+{% endblock %}
