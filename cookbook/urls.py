@@ -26,5 +26,6 @@ urlpatterns = [
     path('', views.signup, name='signup'),
     path('logout/', views.logout, name='logout'),
     path('bookmarks/', views.bookmarks, name='bookmarks'),
+    path('card/<str:recipe_url>/', views.card, name='card'),
     re_path(r'^.*/$', views.errors, name='errors'),
 ]
