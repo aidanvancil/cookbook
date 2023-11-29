@@ -13,7 +13,7 @@
       <a href="{% url 'bookmarks' %}" class="ml-2 text-white {% if request.path == '/bookmarks/' %}font-extrabold{% endif %} hover:underline">Bookmarks</a>
     </div>
   </div>
-  <div class="w-5/6 flex-grow flex-col p-8 rounded-xl">
+  <div class="w-5/6 flex-grow flex-col p-8 overflow-y-auto scrollbar-thin scrollbar-thumb-[#8B5D2E] scrollbar-track-[#CAB29B] scrollbar-thumb-rounded bg-[#A98467]">
     {% block main_content %}
     
     {% endblock %}
