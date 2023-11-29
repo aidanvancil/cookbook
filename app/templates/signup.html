@@ -2,19 +2,31 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="min-h-screen flex items-center justify-center bg-[#F0EAD2]">
-  <p class="mt-4">Already have an account? <a href="{% url 'login' %}" class="text-blue-500">Log In</a>.</p>
-
-  <div class="bg-white p-8 rounded shadow-md w-1/2 max-w-md">
-    <h2 class="text-2xl font-semibold mb-6">Sign Up</h2>
-    <form method="post">
+<div class="h-screen flex flex-col items-center justify-center bg-[#F0EAD2]">
+  <div class="bg-white px-10 py-3 w-auto flex flex-col justify-center items-center text-center rounded-lg shadow-lg border border-black">
+    <h2 class="text-2xl font-bold underline mb-6">Sign Up</h2>
+    <form class="" method="post">
       {% csrf_token %}
-      {{ form.as_p }}
-      <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+      
+      {% for field in form %}
+        <div class="mb-4 text-left flex">
+          {{ field.label_tag }}
+          <div class="flex-grow mx-3"></div>
+          <div class="font-bold">{{ field }}</div> 
+          {% for error in field.errors %}
+            {% if "password" in error %}
+=            {% else %}
+              <p class="text-red-500">{{ error }}</p>
+            {% endif %}
+          {% endfor %}
+        </div>
+      {% endfor %}
+      
+      <button type="submit" class="bg-[#A98467] hover:scale-105 transition-transform  hover:text-black text-[#6C584C] font-bold py-2 px-4 rounded">
         Sign Up
       </button>
     </form>
-
   </div>
+  <button class="bg-[#A98467] hover:scale-105 transition-transform text-[#6C584C] hover:text-black font-bold px-4 py-2 m-4 mb-20 rounded-md"><a href="{% url 'login' %}">Already have an account? Log In.</a></button>
 </div>
 {% endblock %}
