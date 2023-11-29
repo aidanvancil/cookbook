@@ -1,14 +1,63 @@
 <!-- home.html -->
 {% extends 'base_home.html' %}
+{% load base64_tags %}
 
 {% block main_content %}
-  <h2 class="text-2xl font-semibold mb-6">Welcome, {{ user.username }}!</h2>
-  <p class="mb-4">Home page.</p>
-
+  <div class="flex justify-start">
+    <h2 class="text-2xl font-semibold">Welcome, {{ user.username }}!</h2>
+    <div class="flex-grow"></div>
+    <h2 class="rounded-lg bg-[#F5EFE6] hover:scale-105 transition-transform text-xl font-semibold px-3 py-1 z-1"><a href="{% url 'logout' %}" class="text-black hover:underline">Logout</a></h2>
+  </div>
   <!-- Search Bar -->
-  <div class="mb-6">
-    <input type="text" placeholder="Search for recipes..." class="w-full p-2 border border-gray-300 rounded">
+  <form method="post" action="{% url 'home' %}" class="flex flex-col justify-center items-center space-y-4 mb-10">
+    {% csrf_token %}
+    <input type="text" class="bg-[#CAB29B] rounded-lg w-1/2 placeholder:text-gray-600 font-semibold" name="q" placeholder="Search for recipes">
+    <button type="submit" class="bg-[#CAB29B] rounded-lg hover:scale-105 hover:font-bold px-4 py-2 transition-transform">Search</button>
+  </form>
+
+  <!-- Recipe Grid -->
+  <div class="grid grid-cols-4 gap-10">
+    {% for recipe in recipes %}
+      <div class="rounded-lg overflow-hidden bg-[#F5EFE6] shadow-md p-6">
+        <!-- Recipe Image (Assuming it's stored in recipe.recipe.image) -->
+        <img src="{{ recipe.recipe.image }}" alt="{{ recipe.recipe.label }}" class="mx-auto mb-4 rounded-md">
+
+        <!-- Recipe Header -->
+        <h3 class="text-lg font-semibold mb-2">{{ recipe.recipe.label }}</h3>
+
+        <!-- Brief Description -->
+        <p class="text-sm text-gray-700">{{ recipe.recipe.description }}</p>
+
+        <!-- More Details Link -->
+        <div class="flex justify-start">
+          <a href="{% url 'card' recipe_url=recipe.recipe.uri|base64_encode%}" class="block text-blue-500 hover:underline mt-2">More Details</a>
+          <div class="flex-grow"></div>
+          <button class="text-3xl" onclick="">🤍</button>
+        </div>
+      </div>
+    {% endfor %}
   </div>
 
-  <a href="{% url 'logout' %}" class="text-blue-500 hover:underline">Logout</a>
+  {% if recipes.number %}
+  <!-- Pagination -->
+  <div class="pagination m-5">
+    <span class="step-links">
+      {% if recipes.has_previous %}
+        <a href="?page=1">&laquo; first</a>
+        <a href="?page={{ recipes.previous_page_number }}">previous</a>
+      {% endif %}
+
+        
+      <span class="current">
+        Page {{ recipes.number }} of {{ recipes.paginator.num_pages }}.
+      </span>
+
+      {% if recipes.has_next %}
+        <a href="?page={{ recipes.next_page_number }}">next</a>
+        <a href="?page={{ recipes.paginator.num_pages }}">last &raquo;</a>
+      {% endif %}
+    </span>
+  </div>
+  {% endif %}
+
 {% endblock %}
