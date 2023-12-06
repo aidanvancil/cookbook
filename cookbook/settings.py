@@ -36,6 +36,9 @@ DEBUG = True
 ALLOWED_HOSTS = ["127.0.0.1", 'localhost']
 
 TAILWIND_APP_NAME = 'app' 
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
+
 
 # Application definition
 
