@@ -18,7 +18,7 @@
     </div>
 
     <div class="flex justify-center items-center mt-6 w-auto px-6 py-3 bg-[#F5EFE6] font-bold text-center rounded-lg">
-      <a href="{% url 'home' %}" class="text-blue-500 hover:underline">Back to Home</a>
+      <a href="{% url link %}" class="text-blue-500 hover:underline">Back to <span class="capitalize">{{link}}</span></a>
     </div>
   </div>
 {% endblock %}
