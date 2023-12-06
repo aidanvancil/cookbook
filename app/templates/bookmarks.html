@@ -1,7 +1,39 @@
 <!-- bookmarks.html -->
 {% extends 'base_home.html' %}
+{% load base64_tags %}
 
 {% block main_content %}
-  <h2 class="text-2xl font-semibold mb-6">Bookmarked Recipes</h2>
-  <!-- Add your bookmarked recipes content here -->
+  <h1 class="font-semibold text-3xl m-4">Your Bookmarked Recipes</h1>
+  <!-- Bookmark Grid -->
+  <div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+      {% if user_recipes %}
+      {% for recipe in user_recipes %}
+        <div class="rounded-lg overflow-hidden bg-[#F5EFE6] shadow-md p-6">
+          <img src="{{ recipe.details.recipe.image }}" alt="{{ recipe.details.recipe.label }}" class="mx-auto mb-4 rounded-md">
+          <h3 class="text-lg font-semibold mb-2">{{ recipe.title }}</h3>
+          <p class="text-sm text-gray-700">{{ recipe.details.recipe.description }}</p>
+
+          <!-- More Details Link -->
+          <div class="flex justify-start">
+            <a href="{% url 'card' recipe_url=recipe.details.recipe.uri|base64_encode%}?source=bookmarks" class="block text-blue-500 hover:underline mt-2">More Details</a>
+            <div class="flex-grow"></div>
+            <form id="bookmark-form" method="post" {% if recipe.details.recipe.uri in user_recipe_urls %} action="{% url 'unbookmark_recipe' %}?source=bookmarks"  {% else %} action="{% url 'bookmark_recipe' %}?source=bookmarks" {% endif %}>
+              {% csrf_token %}
+              <input type="hidden" name="url" value="{{ recipe.details.recipe.uri }}">
+              <button type="submit" class="text-3xl hover:scale-105 transition-transform" id="bookmark-button" data-recipe-url="{{ recipe.details.recipe.uri }}">
+                {% if recipe.details.recipe.uri in user_recipe_urls %}
+                  ❤️
+                {% else %}
+                  🤍
+                {% endif %}
+              </button>
+            </form>
+          </div>
+        </div>
+      {% endfor %}
+      {% else %}
+        <h2 class="font-semibold bg-white rounded-lg m-5 text-xl p-4 text-center"> No Recipes Bookmarked </h2>
+      {% endif %}
+    </div>
 {% endblock %}
