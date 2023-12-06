@@ -46,9 +46,12 @@ API_APP_ID=****
 API_APP_KEY=****
 ```
 
-- Then, apply up two split terminals (with each in the activated virtual environment).
+- Then, apply up two split terminals (in root directory with each in the activated virtual environment).
     - In one terminal run `python3 manage.py runserver`
     - In the other terminal run `python3 manage.py tailwind start`
+    - You might need to run this too (in root directory):
+        - `python3 manage.py makemigrations`
+        - `python3 manage.py migrate`     
 
 Upon running the above `tailwind` command, you likely will get an error to simply install a dependency, but other than that you should be on your way.
 
