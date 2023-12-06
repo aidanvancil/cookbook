@@ -4,7 +4,7 @@
 
 {% block main_content %}
   <div class="flex justify-start">
-    <h2 class="text-2xl font-semibold">Welcome, {{ user.username }}!</h2>
+    <h2 class="text-3xl font-semibold">Welcome, {{ user.username }}!</h2>
     <div class="flex-grow"></div>
     <h2 class="rounded-lg bg-[#F5EFE6] hover:scale-105 transition-transform text-xl font-semibold px-3 py-1 z-1"><a href="{% url 'logout' %}" class="text-black hover:underline">Logout</a></h2>
   </div>
@@ -16,48 +16,53 @@
   </form>
 
   <!-- Recipe Grid -->
-  <div class="grid grid-cols-4 gap-10">
-    {% for recipe in recipes %}
-      <div class="rounded-lg overflow-hidden bg-[#F5EFE6] shadow-md p-6">
-        <!-- Recipe Image (Assuming it's stored in recipe.recipe.image) -->
-        <img src="{{ recipe.recipe.image }}" alt="{{ recipe.recipe.label }}" class="mx-auto mb-4 rounded-md">
+  <div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+      {% for recipe in recipes %}
+        <div class="rounded-lg overflow-hidden bg-[#F5EFE6] shadow-md p-6">
+          <img src="{{ recipe.recipe.image }}" alt="{{ recipe.recipe.label }}" class="mx-auto mb-4 rounded-md">
+          <h3 class="text-lg font-semibold mb-2">{{ recipe.recipe.label }}</h3>
+          <p class="text-sm text-gray-700">{{ recipe.recipe.description }}</p>
 
-        <!-- Recipe Header -->
-        <h3 class="text-lg font-semibold mb-2">{{ recipe.recipe.label }}</h3>
-
-        <!-- Brief Description -->
-        <p class="text-sm text-gray-700">{{ recipe.recipe.description }}</p>
-
-        <!-- More Details Link -->
-        <div class="flex justify-start">
-          <a href="{% url 'card' recipe_url=recipe.recipe.uri|base64_encode%}" class="block text-blue-500 hover:underline mt-2">More Details</a>
-          <div class="flex-grow"></div>
-          <button class="text-3xl" onclick="">🤍</button>
+          <!-- More Details Link -->
+          <div class="flex justify-start">
+            <a href="{% url 'card' recipe_url=recipe.recipe.uri|base64_encode%}?source=home" class="block text-blue-500 hover:underline mt-2">More Details</a>
+            <div class="flex-grow"></div>
+            <form id="bookmark-form" method="post" {% if recipe.recipe.uri in user_recipes %} action="{% url 'unbookmark_recipe' %}?source=home"  {% else %} action="{% url 'bookmark_recipe' %}?source=home" {% endif %}>
+              {% csrf_token %}
+              <input type="hidden" name="url" value="{{ recipe.recipe.uri }}">
+              <button type="submit" class="text-3xl hover:scale-105 transition-transform" id="bookmark-button" data-recipe-url="{{ recipe.recipe.uri }}">
+                {% if recipe.recipe.uri in user_recipes %}
+                  ❤️
+                {% else %}
+                  🤍
+                {% endif %}
+              </button>
+            </form>
+          </div>
         </div>
+      {% endfor %}
+    </div>
+
+    {% if recipes.paginator.num_pages > 1 %}
+      <!-- Pagination -->
+      <div class="pagination mb-28 m-5 font-bold flex justify-center">
+        <span class="step-links">
+          <a href="?page=1" class="hover:underline">&laquo; first</a>
+          {% if recipes.has_previous %}
+            <a href="?page={{ recipes.previous_page_number }}" class="hover:underline">previous</a>
+          {% endif %}
+
+          <span class="current">
+            page {{ recipes.number }} of {{ recipes.paginator.num_pages }}.
+          </span>
+
+          {% if recipes.has_next %}
+            <a href="?page={{ recipes.next_page_number }}" class="hover:underline">next</a>
+            <a href="?page={{ recipes.paginator.num_pages }}" class="hover:underline">last &raquo;</a>
+          {% endif %}
+        </span>
       </div>
-    {% endfor %}
+    {% endif %}
   </div>
-
-  {% if recipes.number %}
-  <!-- Pagination -->
-  <div class="pagination m-5">
-    <span class="step-links">
-      {% if recipes.has_previous %}
-        <a href="?page=1">&laquo; first</a>
-        <a href="?page={{ recipes.previous_page_number }}">previous</a>
-      {% endif %}
-
-        
-      <span class="current">
-        Page {{ recipes.number }} of {{ recipes.paginator.num_pages }}.
-      </span>
-
-      {% if recipes.has_next %}
-        <a href="?page={{ recipes.next_page_number }}">next</a>
-        <a href="?page={{ recipes.paginator.num_pages }}">last &raquo;</a>
-      {% endif %}
-    </span>
-  </div>
-  {% endif %}
-
 {% endblock %}
