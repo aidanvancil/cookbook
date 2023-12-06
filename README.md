@@ -33,7 +33,7 @@ cd ../../.
 Create a PostgreSQL database and update the DATABASES configuration in cookbook/settings.py with database credentials:
 
 - Go to `https://developer.edamam.com/login` and create an account. Go to products then signup with the Edamam Recipe API. Note down the App Id and App Key for the future. 
-- Load listed PG_Schema_Dump
+- Load listed PG_Schema_Dump via `psql Cookbook < cookbook_dump`
 - Create a .env file in root directory (should look similar to the following):
 
 ```
